@@ -9,19 +9,25 @@ def getArgs():
 
 def main(interval, margin):
 	line = stdin.readline()
-	idx = parse(line)
-	print(idx)
-
+	idx = line.split(',')
+	#print(idx)
+	#idx = parse(line)
 	while line:
 		line = stdin.readline()
 		row = line.split(', ')
-		print(row)
+		print(row[0])
+		#gaze(idx, row, 0)
 
-def parse(header):
-	names = header
-	n = len(names)
-	z = zip(names, range(n))
-	return dict(z)
+def get(idx, row, name):
+	i = idx[name]
+	return row[i]
+
+def gaze(idx, row, lr):
+	def g(c):
+		return float(get(idx, row, 'gaze_{}_{}'.format(lr, c)))
+	print(g('x'))
+	return (g('x'),g('y'),g('z'))
+
 
 if __name__ == '__main__':
 	main(*getArgs())
