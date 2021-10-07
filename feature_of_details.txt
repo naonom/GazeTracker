@@ -1,0 +1,9 @@
+Input:webcam
+Camera parameters:875,875,640,360
+Output csv:feature.csv
+Gaze: 1
+AUs: 0
+Landmarks 2D: 0
+Landmarks 3D: 1
+Pose: 0
+Shape parameters: 0
