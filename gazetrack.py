@@ -9,13 +9,13 @@ def getArgs():
 
 def main(interval, margin):
 	line = stdin.readline()
-	idx = line.split(',')
-	#print(idx)
-	#idx = parse(line)
+	row = line.split(',')
+
 	while line:
 		line = stdin.readline()
-		row = line.split(', ')
-		print(row[0])
+		date = line.split(',')
+		
+		print(date)
 		#gaze(idx, row, 0)
 
 def get(idx, row, name):
