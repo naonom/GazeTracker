@@ -28,7 +28,7 @@ def get(baseDate):
 			print('Openface failure')
 	else:
 		return fakeDate(497)
-		print('can not get baseDate')
+		print('Can not get baseDate')
 
 def getGaze(date):
 	if date is not None:
@@ -37,7 +37,7 @@ def getGaze(date):
 			gazeDate.append(date[num + 5])
 		return gazeDate
 	else:
-		print('date is None')
+		print('Date is None')
 	
 def fakeDate(num):
 	fake = []
