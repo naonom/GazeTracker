@@ -10,17 +10,23 @@ def getArgs():
 def main(interval, margin):
 	line = stdin.readline()
 	row = line.split(',')
-
 	while line:
 		line = stdin.readline()
-		date = line.split(',')
-		
-		print(date)
-		#gaze(idx, row, 0)
+		baseDate = line.split(',')
+		print(baseDate)
+		date = get(baseDate)
+		if date is not None:
+			print(date)
 
-def get(idx, row, name):
-	i = idx[name]
-	return row[i]
+
+def get(baseDate):
+	if baseDate is not None:
+		if baseDate[4] == '1': #Openface success
+			return baseDate
+		else:
+			print('Openface failure')
+	else:
+		print('can not get baseDate')
 
 def gaze(idx, row, lr):
 	def g(c):
