@@ -15,8 +15,8 @@ def main(interval, margin):
 		baseDate = line.split(',')
 		print(baseDate)
 		date = get(baseDate)
-		if date is not None:
-			print(date)
+		gaze = getGaze(date)
+		print(gaze)
 
 
 def get(baseDate):
@@ -24,16 +24,26 @@ def get(baseDate):
 		if baseDate[4] == '1': #Openface success
 			return baseDate
 		else:
+			return fakeDate(497)
 			print('Openface failure')
 	else:
+		return fakeDate(497)
 		print('can not get baseDate')
 
-def gaze(idx, row, lr):
-	def g(c):
-		return float(get(idx, row, 'gaze_{}_{}'.format(lr, c)))
-	print(g('x'))
-	return (g('x'),g('y'),g('z'))
-
+def getGaze(date):
+	if date is not None:
+		gazeDate = []
+		for num in range(6):
+			gazeDate.append(date[num + 5])
+		return gazeDate
+	else:
+		print('date is None')
+	
+def fakeDate(num):
+	fake = []
+	for i in range(497):
+		fake.append('0')
+	return fake
 
 if __name__ == '__main__':
 	main(*getArgs())
