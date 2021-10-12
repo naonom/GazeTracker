@@ -16,7 +16,8 @@ def main(interval, margin):
 		print(baseDate)
 		date = get(baseDate)
 		gaze = getGaze(date)
-		print(gaze)
+		gazeAngle = getGazeAngle(date)
+		print(gazeAngle)
 
 
 def get(baseDate):
@@ -37,11 +38,22 @@ def getGaze(date):
 			gazeDate.append(date[num + 5])
 		return gazeDate
 	else:
-		print('Date is None')
-	
-def fakeDate(num):
+		return fakeDate(6)
+		print('GazeDate is None')
+
+def getGazeAngle(date):
+	if date is not None:
+		gazeAngleDate = []
+		for num in range(2):
+			gazeAngleDate.append(date[num + 11])
+		return gazeAngleDate
+	else:
+		return fakeDate(2)
+		print('GazeAngleDate is None')
+
+def  fakeDate(num):
 	fake = []
-	for i in range(497):
+	for i in range(num):
 		fake.append('0')
 	return fake
 
