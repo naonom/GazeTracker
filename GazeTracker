@@ -46,8 +46,8 @@ pushd $(dirname $openface)
 popd
 
 tail -f $csv |
-python3 gazetrack.py $interval $margin |
-while read line; do
-    echo $line
-    $cmd &
-done
+python3 gazetrack.py $interval $margin #|
+#while read line; do
+#    echo $line
+#    $cmd &
+#done

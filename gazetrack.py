@@ -1,6 +1,7 @@
 from math import sqrt
 from sys import argv, stdin
-from time import perf_counter
+
+import viewpoint as vp
 
 def getArgs():
 	interval = float(argv[1])
@@ -10,15 +11,14 @@ def getArgs():
 def main(interval, margin):
 	line = stdin.readline()
 	row = line.split(',')
+	print(row)
 	while line:
 		line = stdin.readline()
 		baseDate = line.split(',')
-		print(baseDate)
 		date = get(baseDate)
 		gaze = getGaze(date)
 		gazeAngle = getGazeAngle(date)
 		print(gazeAngle)
-
 
 def get(baseDate):
 	if baseDate is not None:
@@ -45,7 +45,10 @@ def getGazeAngle(date):
 	if date is not None:
 		gazeAngleDate = []
 		for num in range(2):
-			gazeAngleDate.append(date[num + 11])
+			floatNum = float(date[num + 11])
+			degree = vp.radianToDegree(floatNum)
+			point = vp.degreeToPoint(degree, 50.0)
+			gazeAngleDate.append(point)
 		return gazeAngleDate
 	else:
 		return fakeDate(2)
@@ -56,6 +59,8 @@ def  fakeDate(num):
 	for i in range(num):
 		fake.append('0')
 	return fake
+
+
 
 if __name__ == '__main__':
 	main(*getArgs())
