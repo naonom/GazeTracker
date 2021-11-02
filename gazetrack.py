@@ -2,6 +2,7 @@ from math import sqrt
 from sys import argv, stdin
 
 import viewpoint as vp
+import isdatecorrect as idc
 
 def getArgs():
 	interval = float(argv[1])
@@ -12,14 +13,25 @@ def main(interval, margin):
 	line = stdin.readline()
 	row = line.split(',')
 	print(row)
+	beforeGazeAngle = [0, 0]
 	while line:
 		line = stdin.readline()
 		baseDate = line.split(',')
 		date = getDate(baseDate)
 		gazeAngle = filterGazeAngle(date)
-		print(gazeAngle, end='')
-		gazePoint = getPoint(gazeAngle)
-		print(gazePoint)
+
+		isCorrectAngleDate = idc.isGazeAngleDateCorrect(beforeGazeAngle, gazeAngle, 200.0)
+
+		if isCorrectAngleDate is True:
+			beforeGazeAngle = gazeAngle
+			gazePoint = getPoint(beforeGazeAngle)
+		else:
+			gazePoint = getPoint(beforeGazeAngle)
+
+
+		#print(gazeAngle, end='')
+		#gazePoint = getPoint(gazeAngle)
+		#print(gazePoint)
 
 #get date from csv
 def getDate(baseDate):
@@ -35,12 +47,12 @@ def getDate(baseDate):
 
 #filter gaze vector date from date
 def filterGaze(date):
-	if date is not None:
+	try:
 		gazeDate = []
 		for num in range(6):
 			gazeDate.append(date[num + 5])
 		return gazeDate
-	else:
+	except:
 		return fakeDate(6)
 		print('GazeDate is None')
 
@@ -72,8 +84,7 @@ def getPoint(gazeAngle):
 		gazePointDate.append(0)
 	return gazePointDate
 
-	
-
+#false date
 def  fakeDate(num):
 	fake = []
 	for i in range(num):
