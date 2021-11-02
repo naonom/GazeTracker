@@ -15,23 +15,26 @@ def main(interval, margin):
 	while line:
 		line = stdin.readline()
 		baseDate = line.split(',')
-		date = get(baseDate)
-		gaze = getGaze(date)
-		gazeAngle = getGazeAngle(date)
-		print(gazeAngle)
+		date = getDate(baseDate)
+		gazeAngle = filterGazeAngle(date)
+		print(gazeAngle, end='')
+		gazePoint = getPoint(gazeAngle)
+		print(gazePoint)
 
-def get(baseDate):
-	if baseDate is not None:
+#get date from csv
+def getDate(baseDate):
+	try:
 		if baseDate[4] == '1': #Openface success
 			return baseDate
 		else:
 			return fakeDate(497)
 			print('Openface failure')
-	else:
+	except:
 		return fakeDate(497)
 		print('Can not get baseDate')
 
-def getGaze(date):
+#filter gaze vector date from date
+def filterGaze(date):
 	if date is not None:
 		gazeDate = []
 		for num in range(6):
@@ -41,8 +44,9 @@ def getGaze(date):
 		return fakeDate(6)
 		print('GazeDate is None')
 
-def getGazeAngle(date):
-	if date is not None:
+#filter gaze angle date from date
+def filterGazeAngle(date):
+	try:
 		gazeAngleDate = []
 		for num in range(2):
 			floatNum = float(date[num + 11])
@@ -50,9 +54,25 @@ def getGazeAngle(date):
 			point = vp.degreeToPoint(degree, 50.0)
 			gazeAngleDate.append(point)
 		return gazeAngleDate
-	else:
+	except:
 		return fakeDate(2)
 		print('GazeAngleDate is None')
+
+#gazedate to point
+def getPoint(gazeAngle):
+	gazePointDate = []
+	try:
+		for num in range(2):
+			floatNum = float(gazeAngle[num])
+			degree = vp.radianToDegree(floatNum)
+			point = vp.degreeToPoint(degree, 50.0)
+			gazePointDate.append(point)
+	except:
+		gazePointDate.append(0)
+		gazePointDate.append(0)
+	return gazePointDate
+
+	
 
 def  fakeDate(num):
 	fake = []
