@@ -10,28 +10,31 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	line = stdin.readline()
-	row = line.split(',')
-	print(row)
+	setup()
 	beforeGazeAngle = [0, 0]
-	while line:
+	while True:
 		line = stdin.readline()
 		baseDate = line.split(',')
 		date = getDate(baseDate)
 		gazeAngle = filterGazeAngle(date)
-
+		print(gazeAngle, end='')
 		isCorrectAngleDate = idc.isGazeAngleDateCorrect(beforeGazeAngle, gazeAngle, 200.0)
 
 		if isCorrectAngleDate is True:
 			beforeGazeAngle = gazeAngle
 			gazePoint = getPoint(beforeGazeAngle)
+			print(gazePoint)
 		else:
 			gazePoint = getPoint(beforeGazeAngle)
+			print(gazePoint)
 
-
-		#print(gazeAngle, end='')
-		#gazePoint = getPoint(gazeAngle)
-		#print(gazePoint)
+def setup():
+	try:
+		line = stdin.readline()
+		row = line.split(',')
+		print(row)
+	except:
+		print('Openface setup error')
 
 #get date from csv
 def getDate(baseDate):
@@ -46,7 +49,7 @@ def getDate(baseDate):
 		print('Can not get baseDate')
 
 #filter gaze vector date from date
-def filterGaze(date):
+def filterGazeVector(date):
 	try:
 		gazeDate = []
 		for num in range(6):
@@ -62,26 +65,36 @@ def filterGazeAngle(date):
 		gazeAngleDate = []
 		for num in range(2):
 			floatNum = float(date[num + 11])
-			degree = vp.radianToDegree(floatNum)
-			point = vp.degreeToPoint(degree, 50.0)
-			gazeAngleDate.append(point)
+			gazeAngleDate.append(floatNum)
 		return gazeAngleDate
 	except:
-		return fakeDate(2)
+		gazeAngleDate.append(0.0)
+		gazeAngleDate.append(0.0)
 		print('GazeAngleDate is None')
 
 #gazedate to point
-def getPoint(gazeAngle):
+def getPoint(beforeGazeAngle, gazeAngle):
 	gazePointDate = []
 	try:
-		for num in range(2):
-			floatNum = float(gazeAngle[num])
-			degree = vp.radianToDegree(floatNum)
-			point = vp.degreeToPoint(degree, 50.0)
-			gazePointDate.append(point)
+		isGazeAngleCorrect = idc.isGazeAngleDateCorrect(beforeGazeAngle, GazeAngle, 200.0)
+		if isGazeAngleCorrect is True:
+			gazePointDate = toPoint(gazeAngle)
+		else:
+			gazePointDate = toPoint(beforeGazeAngle)
+		return gazePointDate
+
+		def toPoint(gazeAngle):
+			pointDate = []
+			for num in range(len(gazeAngle)):
+				floatNum = gazeAngle[num]
+				degree = vp.radianToDegree(floatNum)
+				point = vp.degreeToPoint(degree, 50.0)
+				pointDate.append(point)
+			return pointDate
+	
 	except:
-		gazePointDate.append(0)
-		gazePointDate.append(0)
+		gazePointDate.append(0.0)
+		gazePointDate.append(0.0)
 	return gazePointDate
 
 #false date
@@ -90,8 +103,6 @@ def  fakeDate(num):
 	for i in range(num):
 		fake.append('0')
 	return fake
-
-
 
 if __name__ == '__main__':
 	main(*getArgs())
