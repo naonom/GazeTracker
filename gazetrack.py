@@ -11,22 +11,17 @@ def getArgs():
 
 def main(interval, margin):
 	setup()
-	beforeGazeAngle = [0, 0]
+	beforeGazeAngle = [0.0, 0.0]
 	while True:
 		line = stdin.readline()
 		baseDate = line.split(',')
 		date = getDate(baseDate)
-		gazeAngle = filterGazeAngle(date)
+		rowGazeAngle = filterGazeAngle(date)
+		gazeAngle = checkGazeAngle(beforeGazeAngle, rowGazeAngle)
 		print(gazeAngle, end='')
-		isCorrectAngleDate = idc.isGazeAngleDateCorrect(beforeGazeAngle, gazeAngle, 200.0)
-
-		if isCorrectAngleDate is True:
-			beforeGazeAngle = gazeAngle
-			gazePoint = getPoint(beforeGazeAngle)
-			print(gazePoint)
-		else:
-			gazePoint = getPoint(beforeGazeAngle)
-			print(gazePoint)
+		
+		gazePoint = getPoint( gazeAngle)
+		print(gazePoint)
 
 def setup():
 	try:
@@ -72,26 +67,22 @@ def filterGazeAngle(date):
 		gazeAngleDate.append(0.0)
 		print('GazeAngleDate is None')
 
+#check gaze angle date
+def checkGazeAngle(beforeGazeAngle, gazeAngle):
+	isGazeAngleCorrect = idc.isGazeAngleDateCorrect(beforeGazeAngle, gazeAngle, 200.0)
+	if isGazeAngleCorrect is True:
+		return gazeAngle
+	else:
+		return beforeGazeAngle
+ 
 #gazedate to point
-def getPoint(beforeGazeAngle, gazeAngle):
+def getPoint(gazeAngle):
 	gazePointDate = []
 	try:
-		isGazeAngleCorrect = idc.isGazeAngleDateCorrect(beforeGazeAngle, GazeAngle, 200.0)
-		if isGazeAngleCorrect is True:
-			gazePointDate = toPoint(gazeAngle)
-		else:
-			gazePointDate = toPoint(beforeGazeAngle)
-		return gazePointDate
-
-		def toPoint(gazeAngle):
-			pointDate = []
-			for num in range(len(gazeAngle)):
-				floatNum = gazeAngle[num]
-				degree = vp.radianToDegree(floatNum)
-				point = vp.degreeToPoint(degree, 50.0)
-				pointDate.append(point)
-			return pointDate
-	
+		for num in range(len(gazeAngle)):
+			degree = vp.radianToDegree(gazeAngle[num])
+			point = vp.degreeToPoint(degree, 50.0)
+			gazePointDate.append(point)	
 	except:
 		gazePointDate.append(0.0)
 		gazePointDate.append(0.0)
