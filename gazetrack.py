@@ -10,7 +10,7 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	setup()
+	start()
 	beforeGazeAngle = [0.0, 0.0]
 	while True:
 		line = stdin.readline()
@@ -23,7 +23,7 @@ def main(interval, margin):
 		gazePoint = getPoint( gazeAngle)
 		print(gazePoint)
 
-def setup():
+def start():
 	try:
 		line = stdin.readline()
 		row = line.split(',')
@@ -80,8 +80,9 @@ def getPoint(gazeAngle):
 	gazePointDate = []
 	try:
 		for num in range(len(gazeAngle)):
-			degree = vp.radianToDegree(gazeAngle[num])
-			point = vp.degreeToPoint(degree, 50.0)
+			point = vp.radianToPoint(gazeAngle[num], 50.0)
+			#degree = vp.radianToDegree(gazeAngle[num])
+			#point = vp.degreeToPoint(degree, 50.0)
 			gazePointDate.append(point)	
 	except:
 		gazePointDate.append(0.0)
