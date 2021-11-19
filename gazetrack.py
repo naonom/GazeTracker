@@ -1,6 +1,8 @@
 from math import sqrt
 from sys import argv, stdin
 
+
+from model import getData
 import viewpoint as vp
 import isdatecorrect as idc
 
@@ -10,7 +12,11 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	start()
+	#testclass = test.TestClass()
+	#testclass.test_method1()
+	get = getData.CSV()
+	get.Row()
+	#start()
 	beforeGazeAngle = [0.0, 0.0]
 	while True:
 		line = stdin.readline()
