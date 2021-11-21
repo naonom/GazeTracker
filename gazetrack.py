@@ -20,8 +20,8 @@ def main(interval, margin):
 		#line = stdin.readline()
 		#baseDate = line.split(',')
 		#date = getDate(baseDate)
-		date = get.gazeData()
-		rowGazeAngle = filterGazeAngle(date)
+		data = get.gazeData()
+		rowGazeAngle = filterGazeAngle(data)
 		gazeAngle = checkGazeAngle(beforeGazeAngle, rowGazeAngle)
 		print(gazeAngle, end='')
 		
