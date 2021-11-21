@@ -1,8 +1,8 @@
 from sys import stdin
-
+from typing import List
 
 class CSV():
-    beforeGazeAngle = [0.0, 0.0]
+    beforeGazeAngle: List[float] = [0.0, 0.0]
     
     def __init__(self):
         pass
