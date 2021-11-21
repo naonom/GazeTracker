@@ -1,13 +1,14 @@
 from sys import stdin
 
-class CSV:
+
+class CSV():
     beforeGazeAngle = [0.0, 0.0]
     
     def __init__(self):
         pass
 
     #get data row
-    def Row(self):
+    def Row(self) -> None:
         try:
             rowline = stdin.readline()
             row = rowline.split(',')
@@ -16,7 +17,7 @@ class CSV:
             print('row error')
 
     #get face data
-    def gazeData(self):
+    def gazeData(self) -> list:
         try:
             line = stdin.readline()
             baseData = line.split(',')
