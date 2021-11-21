@@ -12,16 +12,15 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	#testclass = test.TestClass()
-	#testclass.test_method1()
 	get = getData.CSV()
 	get.Row()
 	#start()
 	beforeGazeAngle = [0.0, 0.0]
 	while True:
-		line = stdin.readline()
-		baseDate = line.split(',')
-		date = getDate(baseDate)
+		#line = stdin.readline()
+		#baseDate = line.split(',')
+		#date = getDate(baseDate)
+		date = get.gazeData()
 		rowGazeAngle = filterGazeAngle(date)
 		gazeAngle = checkGazeAngle(beforeGazeAngle, rowGazeAngle)
 		print(gazeAngle, end='')
@@ -29,15 +28,8 @@ def main(interval, margin):
 		gazePoint = getPoint( gazeAngle)
 		print(gazePoint)
 
-def start():
-	try:
-		line = stdin.readline()
-		row = line.split(',')
-		print(row)
-	except:
-		print('Openface setup error')
-
 #get date from csv
+'''
 def getDate(baseDate):
 	try:
 		if baseDate[4] == '1': #Openface success
@@ -48,6 +40,7 @@ def getDate(baseDate):
 	except:
 		return fakeDate(497)
 		print('Can not get baseDate')
+'''
 
 #filter gaze vector date from date
 def filterGazeVector(date):
