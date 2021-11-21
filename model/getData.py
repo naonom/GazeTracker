@@ -33,23 +33,4 @@ class CSV:
             for i in range(497):
                 fake.append('0')
             return fake
-
-    #get date from csv
-        def getData(baseData):
-            try:
-                if baseData[4] == '1': #Openface success
-                    return baseData
-                else:
-                    print('Openface failure')
-                    return fakeData(497)
-			        
-            except:
-                print('Can not get baseDate')
-                return fakeData(497)
-
-            def  fakeData(num):
-                fake = []
-                for i in range(num):
-                    fake.append('0')
-                return fake
 		             
