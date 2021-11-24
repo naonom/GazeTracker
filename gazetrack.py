@@ -1,8 +1,8 @@
 from math import sqrt
 from sys import argv, stdin
 
-
-from model import getData
+from GazeData import GetDataModel
+from GazeData import GetDataPresenter
 import viewpoint as vp
 import isdatecorrect as idc
 
@@ -12,14 +12,11 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	get = getData.CSV()
+	get = GetDataModel.CSV()
+	getPresenter = GetDataPresenter.CSVPresenter()
 	get.Row()
-	#start()
 	beforeGazeAngle = [0.0, 0.0]
 	while True:
-		#line = stdin.readline()
-		#baseDate = line.split(',')
-		#date = getDate(baseDate)
 		data = get.gazeData()
 		rowGazeAngle = filterGazeAngle(data)
 		gazeAngle = checkGazeAngle(beforeGazeAngle, rowGazeAngle)
@@ -27,20 +24,6 @@ def main(interval, margin):
 		
 		gazePoint = getPoint( gazeAngle)
 		print(gazePoint)
-
-#get date from csv
-'''
-def getDate(baseDate):
-	try:
-		if baseDate[4] == '1': #Openface success
-			return baseDate
-		else:
-			return fakeDate(497)
-			print('Openface failure')
-	except:
-		return fakeDate(497)
-		print('Can not get baseDate')
-'''
 
 #filter gaze vector date from date
 def filterGazeVector(date):
