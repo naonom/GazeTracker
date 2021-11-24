@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 class Controller():
     def __init__(self,master,model,view):
@@ -7,8 +8,6 @@ class Controller():
         self.view = view
 
         self.master.bind("<space>",self.moveController)
-        #self.master.after(100, self.getDateController)
-        #self.getDateController()
         
     def moveController(self,event):
         self.model.moveModel(self.view.canvas,"id1")

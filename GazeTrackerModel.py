@@ -10,8 +10,8 @@ class Model():
         canvas.move(id,5,5)
     
     def getDataModel(self):
-        print('here')
-        '''
+        #print('here')
+        
         baseData = []
         try:
             line = stdin.readline()
@@ -24,5 +24,6 @@ class Model():
             for i in range(497):
                 fake.append('0')
             baseData = fake
-        '''
+            print(baseData)
+        
 
