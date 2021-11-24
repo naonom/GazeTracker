@@ -1,5 +1,6 @@
 from math import sqrt
 from sys import argv, stdin
+import tkinter as tk
 
 from GazeData import GetDataModel
 from GazeData import GetDataPresenter
@@ -78,7 +79,11 @@ def  fakeDate(num):
 		fake.append('0')
 	return fake
 
+
+
+
 if __name__ == '__main__':
 	main(*getArgs())
+
 
 
