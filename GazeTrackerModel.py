@@ -10,22 +10,19 @@ class Model():
         canvas.move(id,5,5)
     
     def getDataModel(self) -> list:
-        #print('here')
         
         baseData = []
         try:
             line = stdin.readline()
             baseData = line.split(',')
-            print(baseData)
             return baseData
         
         except:
-            print('can not read line')
+            print('tail fail')
             fake = []
             for i in range(497):
                 fake.append('0')
             baseData = fake
-            print(baseData)
             return baseData
         
 

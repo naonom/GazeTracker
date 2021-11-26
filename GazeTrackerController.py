@@ -3,6 +3,9 @@ from tkinter import ttk
 
 class Controller():
     
+    baseData:list = []
+    gazeVectorData:list = []
+    gazeAngleData:list = []
 
     def __init__(self,master,model,view):
         self.master = master
@@ -18,23 +21,39 @@ class Controller():
 
     def getDataController(self):
         self.baseData = self.model.getDataModel()
-    
+        #print(self.baseData)
+        
     #check facedata and pick gazedata
-    def pickGazeVectorData(self) -> list:
-        gazeData = []
-        '''
+    def pickGazeVectorData(self):
         try:
-            if baseData[4] == '1':
+            self.gazeVectorData.clear()
+            if self.baseData[4] == '1':
                 for num in range(6):
-                    gazeData.append(int(baseData[num + 5]))
+                    self.gazeVectorData.append(float(self.baseData[num + 5]))
             else:
                 for i in 6:
-                    gazeData.append(0)
-                print('tracking failure')
+                    self.gazeVectorData.append(0.0)
+                print('tracking fail')
         except:
-                for i in 6:
-                    gazeData.append(0)
-        '''
-        print('pick')
-        return gazeData
+                for i in range(6):
+                    self.gazeVectorData.append(0.0)
+                    print('data fail')
+        #print(self.gazeVectorData)
+        return self.gazeVectorData
             
+    def pickGazeAngleData(self):
+        try:
+            self.gazeAngleData.clear()
+            if self.baseData[4] == '1':
+                for num in range(2):
+                    self.gazeAngleData.append(float(self.baseData[num + 11]))
+            else:
+                for i in 6:
+                    self.gazeAngleData.append(0.0)
+                print('tracking fail')
+        except:
+                for i in range(2):
+                    self.gazeAngleData.append(0.0)
+                    print('data fail')
+        print(self.gazeAngleData)
+        return self.gazeAngleData

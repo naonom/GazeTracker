@@ -19,15 +19,15 @@ class Application(tk.Frame):
         self.update_data()
 
     def update_data(self):
-        print('controller')
         self.controller.getDataController()
         self.controller.pickGazeVectorData()
-        self.master.after(1000, self.update_data)
+        self.controller.pickGazeAngleData()
+        self.master.after(100, self.update_data)
 
 def main():
     root = tk.Tk()
     app = Application(master = root)
-    root.after(1000, app.update_data)
+    root.after(100, app.update_data)
     app.mainloop()
 
 
