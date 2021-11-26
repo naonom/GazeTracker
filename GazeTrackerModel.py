@@ -9,7 +9,7 @@ class Model():
     def moveModel(self,canvas,id):
         canvas.move(id,5,5)
     
-    def getDataModel(self):
+    def getDataModel(self) -> list:
         #print('here')
         
         baseData = []
@@ -17,6 +17,7 @@ class Model():
             line = stdin.readline()
             baseData = line.split(',')
             print(baseData)
+            return baseData
         
         except:
             print('can not read line')
@@ -25,5 +26,6 @@ class Model():
                 fake.append('0')
             baseData = fake
             print(baseData)
+            return baseData
         
 
