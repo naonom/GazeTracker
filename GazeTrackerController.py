@@ -19,6 +19,9 @@ class Controller():
     def moveController(self,event):
         self.model.moveModel(self.view.canvas,"id1")
 
+    def movePoint(selfm, event):
+        print('movepoint here?')
+        
     def getDataController(self):
         self.baseData = self.model.getDataModel()
         #print(self.baseData)
