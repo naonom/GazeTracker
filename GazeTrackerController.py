@@ -10,10 +10,18 @@ class Controller():
     pointData:list = []
     showPointData: list = []
     
+    limitArea: list = []
+    point_x:float
+    point_y:float
     def __init__(self,master,model,view):
         self.master = master
         self.model = model
         self.view = view
+
+        self.limitArea.append(self.model.width)
+        self.limitArea.append(self.model.height)
+        point_x = self.limitArea[0]/2
+        point_y = self.limitArea[1]/2
 
         #self.master.bind("<space>",self.moveController)
         
@@ -22,8 +30,14 @@ class Controller():
 
     def movePointController(self):
         #print('movepoint here?')
+        #0より小さい1280より大きい場合動かさない
+
         try:
+            self.point_x += self.showPointData[0]
+            self.point_y += self.showPointData[1]
+            
             self.model.movePoint(self.view.canvas,"viewpoint", self.showPointData[0], self.showPointData[1])
+
         except:
             self.model.movePoint(self.view.canvas,"viewpoint", 0, 0)
         
