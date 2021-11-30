@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
+import math
 
 class Controller():
     
     baseData:list = []
     gazeVectorData:list = []
     gazeAngleData:list = []
+    pointData:list = []
 
     def __init__(self,master,model,view):
         self.master = master
@@ -35,7 +37,7 @@ class Controller():
         except:
                 for i in range(6):
                     self.gazeVectorData.append(0.0)
-                    print('data fail')
+                    print('get data fail')
         #print(self.gazeVectorData)
         #return self.gazeVectorData
             
@@ -47,13 +49,26 @@ class Controller():
                         self.gazeAngleData.append(float(self.baseData[11]))
                         self.gazeAngleData.append(float(self.baseData[12]))
             else:
-                for i in 6:
+                self.gazeAngleData.clear()
+                for i in 6:                  
                     self.gazeAngleData.append(0.0)
                 print('tracking fail')
         except:
-                for i in range(2):
-                    self.gazeAngleData.append(0.0)
-                    print('data fail')
-        print(self.gazeAngleData)
+            self.gazeAngleData.clear()
+            for i in range(2):
+                self.gazeAngleData.append(0.0)
+            print('check data fail')
+        #print(self.gazeAngleData)
         #return self.gazeAngleData
     
+    def AngleToPoint(self, distance):
+        self.pointData.clear()
+        try:
+            if distance is not None:
+                for num in range(len(self.gazeAngleData)):
+                    point = distance * math.tan(self.gazeAngleData[num])
+                    self.pointData.append(point)
+        except:
+            print('to point error')
+        
+        print(self.pointData)

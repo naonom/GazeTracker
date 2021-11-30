@@ -22,6 +22,7 @@ class Application(tk.Frame):
         self.controller.getDataController()
         self.controller.pickGazeVectorData()
         self.controller.pickGazeAngleData()
+        self.controller.AngleToPoint(50.0)
         self.master.after(100, self.update_data)
 
 def main():
