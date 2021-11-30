@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Canvas, ttk
 import math
 
 class Controller():
@@ -8,19 +8,24 @@ class Controller():
     gazeVectorData:list = []
     gazeAngleData:list = []
     pointData:list = []
-
+    showPointData: list = []
+    
     def __init__(self,master,model,view):
         self.master = master
         self.model = model
         self.view = view
 
-        self.master.bind("<space>",self.moveController)
+        #self.master.bind("<space>",self.moveController)
         
-    def moveController(self,event):
-        self.model.moveModel(self.view.canvas,"id1")
+    #def moveController(self,event):
+        #self.model.moveModel(self.view.canvas,"id1")
 
-    def movePoint(selfm, event):
-        print('movepoint here?')
+    def movePointController(self):
+        #print('movepoint here?')
+        try:
+            self.model.movePoint(self.view.canvas,"viewpoint", self.showPointData[0], self.showPointData[1])
+        except:
+            self.model.movePoint(self.view.canvas,"viewpoint", 0, 0)
         
     def getDataController(self):
         self.baseData = self.model.getDataModel()
@@ -75,3 +80,14 @@ class Controller():
             print('to point error')
         
         print(self.pointData)
+
+    def setupPoint(self):
+        self.showPointData.clear()
+        try: 
+            showPoint_x = self.pointData[0] / 5 * -1
+            showPoint_y = (self.pointData[1] - 13)/ 2
+            self.showPointData.append(showPoint_x)
+            self.showPointData.append(showPoint_y)
+
+        except:
+            print('setup point error')

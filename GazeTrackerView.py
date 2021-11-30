@@ -9,6 +9,8 @@ class View():
         self.canvas.pack()
 
         self.canvas.create_polygon(10,10,10,60,50,35,tag="id1")
+        self.canvas.create_oval(self.model.width/2 - 20, self.model.height/2 - 20, self.model.width/2 + 20, self.model.height/2 + 20, tag="viewpoint")
+
 
 
         
