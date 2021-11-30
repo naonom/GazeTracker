@@ -1,8 +1,9 @@
 from math import sqrt
 from sys import argv, stdin
+import tkinter as tk
 
-
-from model import getData
+from GazeData import GetDataModel
+from GazeData import GetDataPresenter
 import viewpoint as vp
 import isdatecorrect as idc
 
@@ -12,42 +13,18 @@ def getArgs():
 	return (interval, margin)
 
 def main(interval, margin):
-	#testclass = test.TestClass()
-	#testclass.test_method1()
-	get = getData.CSV()
+	get = GetDataModel.CSV()
+	getPresenter = GetDataPresenter.CSVPresenter()
 	get.Row()
-	#start()
 	beforeGazeAngle = [0.0, 0.0]
 	while True:
-		line = stdin.readline()
-		baseDate = line.split(',')
-		date = getDate(baseDate)
-		rowGazeAngle = filterGazeAngle(date)
+		data = get.gazeData()
+		rowGazeAngle = filterGazeAngle(data)
 		gazeAngle = checkGazeAngle(beforeGazeAngle, rowGazeAngle)
 		print(gazeAngle, end='')
 		
 		gazePoint = getPoint( gazeAngle)
 		print(gazePoint)
-
-def start():
-	try:
-		line = stdin.readline()
-		row = line.split(',')
-		print(row)
-	except:
-		print('Openface setup error')
-
-#get date from csv
-def getDate(baseDate):
-	try:
-		if baseDate[4] == '1': #Openface success
-			return baseDate
-		else:
-			return fakeDate(497)
-			print('Openface failure')
-	except:
-		return fakeDate(497)
-		print('Can not get baseDate')
 
 #filter gaze vector date from date
 def filterGazeVector(date):
@@ -102,7 +79,11 @@ def  fakeDate(num):
 		fake.append('0')
 	return fake
 
+
+
+
 if __name__ == '__main__':
 	main(*getArgs())
+
 
 
