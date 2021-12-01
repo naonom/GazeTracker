@@ -8,6 +8,9 @@ class Model():
 
     def moveModel(self,canvas,id):
         canvas.move(id,5,5)
+
+    def movePoint(self, canvas, id, x, y):
+        canvas.move(id, x, y)
     
     def getDataModel(self) -> list:
         

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Canvas, ttk
 import math
 
 class Controller():
@@ -8,19 +8,39 @@ class Controller():
     gazeVectorData:list = []
     gazeAngleData:list = []
     pointData:list = []
+    beforeshowPointData: list = [0.0, 0.0]
+    movePointData:  list = []
 
+    limitArea: list = []
+
+    limitPoint: list = []
     def __init__(self,master,model,view):
         self.master = master
         self.model = model
         self.view = view
 
-        self.master.bind("<space>",self.moveController)
-        
-    def moveController(self,event):
-        self.model.moveModel(self.view.canvas,"id1")
+        #self.limitArea.append(self.model.width)
+        #self.limitArea.append(self.model.height)
+        #point_x = self.limitArea[0]/2
+        #point_y = self.limitArea[1]/2
 
-    def movePoint(selfm, event):
-        print('movepoint here?')
+        #self.master.bind("<space>",self.moveController)
+        
+    #def moveController(self,event):
+        #self.model.moveModel(self.view.canvas,"id1")
+
+    def movePointController(self):
+        #print('movepoint here?')
+        #0より小さい1280より大きい場合動かさない
+
+        try:
+            #self.point_x += self.showPointData[0]
+            #self.point_y += self.showPointData[1]
+            
+            self.model.movePoint(self.view.canvas,"viewpoint", self.movePointData[0], self.movePointData[1])
+
+        except:
+            self.model.movePoint(self.view.canvas,"viewpoint", 0, 0)
         
     def getDataController(self):
         self.baseData = self.model.getDataModel()
@@ -42,7 +62,6 @@ class Controller():
                     self.gazeVectorData.append(0.0)
                     print('get data fail')
         #print(self.gazeVectorData)
-        #return self.gazeVectorData
             
     def pickGazeAngleData(self):
         try:
@@ -62,7 +81,6 @@ class Controller():
                 self.gazeAngleData.append(0.0)
             print('check data fail')
         #print(self.gazeAngleData)
-        #return self.gazeAngleData
     
     def AngleToPoint(self, distance):
         self.pointData.clear()
@@ -74,4 +92,24 @@ class Controller():
         except:
             print('to point error')
         
-        print(self.pointData)
+        #print(self.pointData)
+
+    def setupPoint(self):
+        try: 
+            showPoint_x = self.pointData[0] * -20
+            showPoint_y = (self.pointData[1]-13) * 15
+
+
+            self.movePointData.clear()
+            self.movePointData.append(showPoint_x - self.beforeshowPointData[0])
+            self.movePointData.append(showPoint_y - self.beforeshowPointData[1])
+
+            #print(self.movePointData)
+
+
+            self.beforeshowPointData.clear()
+            self.beforeshowPointData.append(showPoint_x)
+            self.beforeshowPointData.append(showPoint_y)
+            
+        except:
+            print('setup point error')

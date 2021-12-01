@@ -23,12 +23,16 @@ class Application(tk.Frame):
         self.controller.pickGazeVectorData()
         self.controller.pickGazeAngleData()
         self.controller.AngleToPoint(50.0)
-        self.master.after(100, self.update_data)
+        self.controller.setupPoint()
+
+        self.controller.movePointController()
+
+        self.master.after(6, self.update_data)
 
 def main():
     root = tk.Tk()
     app = Application(master = root)
-    root.after(100, app.update_data)
+    root.after(6, app.update_data)
     app.mainloop()
 
 
