@@ -96,11 +96,8 @@ class Controller():
 
     def setupPoint(self):
         try: 
-            #showPoint_x = self.pointData[0] / 5 * -1
-            #showPoint_y = (self.pointData[1] - 13)/ 2
-
-            showPoint_x = self.pointData[0] * -15
-            showPoint_y = (self.pointData[1]-13) * 10
+            showPoint_x = self.pointData[0] * -20
+            showPoint_y = (self.pointData[1]-13) * 15
 
 
             self.movePointData.clear()
