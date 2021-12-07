@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import time
 from GazeTrackerController import Controller
 from GazeTrackerModel import Model
 from GazeTrackerView import View
@@ -19,6 +19,7 @@ class Application(tk.Frame):
         self.update_data()
 
     def update_data(self):
+        s = time.time()
         self.controller.getDataController()
         self.controller.pickGazeVectorData()
         self.controller.pickGazeAngleData()
@@ -26,13 +27,14 @@ class Application(tk.Frame):
         self.controller.setupPoint()
 
         self.controller.movePointController()
-
-        self.master.after(6, self.update_data)
+        e = time.time()
+        print((e-s) * 1000)
+        self.master.after(10, self.update_data)
 
 def main():
     root = tk.Tk()
     app = Application(master = root)
-    root.after(6, app.update_data)
+    root.after(10, app.update_data)
     app.mainloop()
 
 
