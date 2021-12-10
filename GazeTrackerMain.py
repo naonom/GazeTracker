@@ -17,13 +17,13 @@ class Application(tk.Frame):
         self.view = View(master,self.model)
         self.controller = Controller(master,self.model,self.view)
         self.update_data()
+        
     def get_data(self):
         self.controller.getDataController()
         self.master.after(60, self.get_data)
 
     def update_data(self):
         #s = time.time()
-        #self.controller.getDataController() 
         #self.controller.pickGazeVectorData()
         self.controller.pickGazeAngleData()
         self.controller.AngleToPoint(50.0)
