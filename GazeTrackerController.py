@@ -19,10 +19,10 @@ class Controller():
         self.model = model
         self.view = view
 
-        #self.limitArea.append(self.model.width)
-        #self.limitArea.append(self.model.height)
-        #point_x = self.limitArea[0]/2
-        #point_y = self.limitArea[1]/2
+        self.limitArea.append(self.model.width / 2)
+        self.limitArea.append(self.model.height/ 2)
+        point_x = self.limitArea[0]/2
+        point_y = self.limitArea[1]/2
 
         #self.master.bind("<space>",self.moveController)
         
@@ -32,13 +32,20 @@ class Controller():
     def movePointController(self):
         #print('movepoint here?')
         #0より小さい1280より大きい場合動かさない
-
+        output_x: float = 0.0
+        output_y: float = 0.0
         try:
             #self.point_x += self.showPointData[0]
             #self.point_y += self.showPointData[1]
-            
-            self.model.movePoint(self.view.canvas,"viewpoint", self.movePointData[0], self.movePointData[1])
+            #print(self.limitArea[0] + self.movePointData[0])
 
+            if self.limitArea[0] + self.movePointData[0] > 0 and self.limitArea[0] + self.movePointData[0] < self.model.width: 
+                output_x = self.movePointData[0]
+            if self.limitArea[1] + self.movePointData[1] > 0 and self.limitArea[1] + self.movePointData[1] < self.model.height:
+                output_y = self.movePointData[1]
+            #self.model.movePoint(self.view.canvas,"viewpoint", output_x, output_y)
+
+            self.model.movePoint(self.view.canvas,"viewpoint", self.movePointData[0], self.movePointData[1])
         except:
             self.model.movePoint(self.view.canvas,"viewpoint", 0, 0)
         
@@ -96,17 +103,15 @@ class Controller():
 
     def setupPoint(self):
         try: 
-            showPoint_x = self.pointData[0] * -20
-            showPoint_y = (self.pointData[1]-13) * 15
+            showPoint_x = self.pointData[0] * -25
+            showPoint_y = (self.pointData[1]-13) * 20
 
 
             self.movePointData.clear()
             self.movePointData.append(showPoint_x - self.beforeshowPointData[0])
             self.movePointData.append(showPoint_y - self.beforeshowPointData[1])
 
-            #print(self.movePointData)
-
-
+            
             self.beforeshowPointData.clear()
             self.beforeshowPointData.append(showPoint_x)
             self.beforeshowPointData.append(showPoint_y)

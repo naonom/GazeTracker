@@ -3,6 +3,8 @@ import time
 from GazeTrackerController import Controller
 from GazeTrackerModel import Model
 from GazeTrackerView import View
+import cv2
+from PIL import Image, ImageTk, ImageOps
 
 class Application(tk.Frame):
     def __init__(self,master):
@@ -16,7 +18,7 @@ class Application(tk.Frame):
 
         self.view = View(master,self.model)
         self.controller = Controller(master,self.model,self.view)
-        self.update_data()
+        #self.update_data()
         
     def get_data(self):
         self.controller.getDataController()
@@ -33,10 +35,26 @@ class Application(tk.Frame):
         #print((e-s) * 1000)
         self.master.after(10, self.update_data)
 
+    def dispImage(self):
+        ret, frame = self.view.capture.read()
+
+        cv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(cv_image)
+
+        pil_image = ImageOps.pad(pil_image, (self.model.width, self.model.height))
+        self.photo_image = ImageTk.PhotoImage(image=pil_image)
+        self.view.canvas.create_image(
+            self.model.width/2,
+            self.model.height/2,
+            image=self.photo_image
+        )
+        self.master.after(10, self.dispImage)
+
 def main():
     root = tk.Tk()
     app = Application(master = root)
     root.after(60, app.get_data)
+    root.after(10, app.dispImage)
     root.after(10, app.update_data)
     app.mainloop()
 
