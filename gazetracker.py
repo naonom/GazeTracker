@@ -3,7 +3,7 @@ import GetAngle
 import math
 
 def main():
-    cap=cv2.VideoCapture(1)
+    cap=cv2.VideoCapture(2)
     getAngle = GetAngle.OpenFaceAngle()
     print("main")
     width=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
