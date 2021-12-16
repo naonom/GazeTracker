@@ -3,7 +3,7 @@ import GetAngle
 import math
 
 def main():
-    cap=cv2.VideoCapture(2)
+    cap=cv2.VideoCapture(1)
     getAngle = GetAngle.OpenFaceAngle()
     print("main")
     width=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -17,8 +17,8 @@ def main():
     while True:
         ret, frame = cap.read()
         updata(getAngle = getAngle)
-        x += math.floor(getAngle.movePointData[0])
-        y += math.floor(getAngle.movePointData[1])
+        x = math.floor(getAngle.movePointData[0])
+        y = math.floor(getAngle.movePointData[1])
         cv2.rectangle(frame, (x,y), (x+w, y+h), color=(0,0,255),thickness= 4)
         cv2.imshow('frame', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):

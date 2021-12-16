@@ -79,8 +79,10 @@ class OpenFaceAngle():
 
 
             self.movePointData.clear()
-            self.movePointData.append(showPoint_x - self.beforeshowPointData[0])
-            self.movePointData.append(showPoint_y - self.beforeshowPointData[1])
+            #self.movePointData.append(showPoint_x - self.beforeshowPointData[0])
+            #self.movePointData.append(showPoint_y - self.beforeshowPointData[1])
+            self.movePointData.append(showPoint_x)
+            self.movePointData.append(showPoint_y)
 
             
             self.beforeshowPointData.clear()
