@@ -3,11 +3,12 @@ import GetAngle
 import math
 
 def main():
-    cap=cv2.VideoCapture(1)
+    cap=cv2.VideoCapture(0)
     getAngle = GetAngle.OpenFaceAngle()
-    print("main")
+    
     width=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
     x:int = width//2 - width//8
     y:int = height//2 - height//8
 
