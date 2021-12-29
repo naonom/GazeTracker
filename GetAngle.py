@@ -74,8 +74,10 @@ class OpenFaceAngle():
 
     def setupPoint(self):
         try: 
-            showPoint_x = (self.pointData[0]) * -40 + 1000
-            showPoint_y = (self.pointData[1]) * 47 + 500
+            #showPoint_x = (self.pointData[0]) * -40 + 1000
+            #showPoint_y = (self.pointData[1]) * 47 + 500
+            showPoint_x = self.pointData[0] * -25
+            showPoint_y = (self.pointData[1]-13) * 20
             #print(showPoint_x)
 
             self.movePointData.clear()
