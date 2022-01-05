@@ -10,16 +10,14 @@ class Application(tk.Frame):
                 super().__init__(master)
                 self.master.geometry("700x400+50+50")
                 self.master.title("OpenCV 動画表示")
-
-                self.gazetrack = gt.GazeTrack()
-
+        
                 #動画ファイルの読み込み
-                #self.cap = cv2.VideoCapture(1)
+                self.cap = cv2.VideoCapture(1)
                 #プロパティ
-                self.width = self.gazetrack.cap.get( cv2.CAP_PROP_FRAME_WIDTH)
-                self.height = self.gazetrack.cap.get( cv2.CAP_PROP_FRAME_HEIGHT)
-                self.fps = self.gazetrack.cap.get(cv2.CAP_PROP_FPS)
-                self.frame_num = self.gazetrack.cap.get(cv2.CAP_PROP_FRAME_COUNT)
+                self.width = self.cap.get( cv2.CAP_PROP_FRAME_WIDTH)
+                self.height = self.cap.get( cv2.CAP_PROP_FRAME_HEIGHT)
+                self.fps = self.cap.get(cv2.CAP_PROP_FPS)
+                self.frame_num = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)
                 self.time = self.frame_num / self.fps
         
                 self.create_frame()
@@ -39,7 +37,7 @@ class Application(tk.Frame):
                 self.canvas = tk.Canvas(self.frame1, width=600, height=350,)
                 # Canvasを配置
                 self.canvas.pack()
-        
+
         def create_widget(self):
                 #Labelの生成
                 l_property = tk.Label(self.frame3,text="プロパティ", relief="flat")
@@ -52,21 +50,26 @@ class Application(tk.Frame):
                 l_fps.grid(row=3, column=0, sticky = tk.W)
                 l_time = tk.Label(self.frame3,text="time: "+str(int(self.time))+"sec", relief="flat")
                 l_time.grid(row=4, column=0, sticky = tk.W)
-
+        
         def play_video(self):
-                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 600)
-                l_time = tk.Label(self.frame3,text="frame: "+str(int(self.gazetrack.current_frame)), relief="flat")
+                #動画をリサイズしてキャンバスに表示
+                ret, frame = self.cap.read()
+                self.current_frame = self.cap.get(cv2.CAP_PROP_POS_FRAMES)
+                l_time = tk.Label(self.frame3,text="frame: "+str(int(self.current_frame)), relief="flat")
                 l_time.grid(row=5, column=0, sticky = tk.W)
-                
-                self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(self.gazetrack.frame))
+
+                frame = cv2.resize(frame, dsize=(600, int(600*int(self.height)/int(self.width))))
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)        
+                self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
                 self.canvas.create_image(0,0, image= self.photo, anchor = tk.NW)
                 #alter関数 10ms後に関数を実行
                 self.master.after(self.delay, self.play_video)
+        
 
 def main():
-        root = tk.Tk()
-        app = Application(master=root)
-        app.mainloop()
+    root = tk.Tk()
+    app = Application(master=root)
+    app.mainloop() 
 
 if __name__ == "__main__":
-        main()
+    main()
