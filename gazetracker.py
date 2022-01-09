@@ -22,18 +22,17 @@ class GazeTrack():
         self.w = self.width//4
         self.h = self.height//4
 
-    def tracking(self, height: int, width: int, dsize: int):
+    def tracking(self, height: int, width: int, dsize: int, xParam: list, yParam: list):
         ret, self.frame = self.cap.read()
         self.getAngle.getDataModel()
         self.getAngle.pickGazeAngleData()
         self.getAngle.AngleToPoint(50)
-        self.getAngle.setupPoint()
+        self.getAngle.setupPoint(xParam=xParam, yParam=yParam)
 
         self.x = math.floor(self.getAngle.movePointData[0])
         self.y = math.floor(self.getAngle.movePointData[1])
 
         self.current_frame = self.cap.get(cv2.CAP_PROP_POS_FRAMES)
-
         cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
 
         self.frame = cv2.resize(self.frame, dsize=(dsize, int(dsize*int(height)/int(width))))

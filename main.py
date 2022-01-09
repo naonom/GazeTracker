@@ -22,7 +22,10 @@ class Application(tk.Frame):
                 self.fps = self.gazetrack.cap.get(cv2.CAP_PROP_FPS)
                 self.frame_num = self.gazetrack.cap.get(cv2.CAP_PROP_FRAME_COUNT)
                 self.time = self.frame_num / self.fps
-        
+
+                self.xParam: list = [0, 0, 0]
+                self.yParam: list = [0, 0, 0]
+
                 self.create_frame()
                 self.create_widget()
                 self.delay = 10
@@ -40,7 +43,9 @@ class Application(tk.Frame):
         def create_widget(self):
                 #Labelの生成
                 b_camera = tk.Button(self.frame2, text = "camera", width=3, command=self.setup_window)
-                b_camera.pack(side=tk.LEFT)
+                b_camera.grid(row=0, column=0, padx=2, pady=2, sticky=tk.E)
+                e_camera = tk.Button(self.frame2, text = "Exit", width=3, command=self.endApp)
+                e_camera.grid(row=0, column=1, padx=2, pady=2, sticky=tk.E)
 
         def setup_window(self):
                 if self.subWin == None or not self.subWin.winfo_exists():
@@ -48,25 +53,28 @@ class Application(tk.Frame):
                         self.subWin.resizable(width=False, height=False)
                         self.subWin.geometry("300x100")
                         self.subWin.title("camera")
-                        headLabel = tk.Label(self.subWin, text="head")
+                        headLabel = tk.Label(self.subWin, text="x")
                         headLabel.grid(row=0, column=0, padx=5, pady=2, sticky=tk.E)
-                        outcameraLabel = tk.Label(self.subWin, text="outCamera")
+                        outcameraLabel = tk.Label(self.subWin, text="y")
                         outcameraLabel.grid(row=1, column=0, padx=5, pady=2, sticky=tk.E)
                         
-                        head = tk.StringVar()
+                        self.head = tk.StringVar()
                         headEntry = tk.Entry(
                                 self.subWin,
-                                textvariable=head,
+                                textvariable=self.head,
                                 width=20
                         )
+                        headEntry.insert(tk.END, "0,0")
                         headEntry.grid(row=0, column=1)
 
-                        outCamera = tk.StringVar()
+
+                        self.outCamera = tk.StringVar()
                         outCameraEntry = tk.Entry(
                                 self.subWin,
-                                textvariable=outCamera,
+                                textvariable=self.outCamera,
                                 width=20
                         )
+                        outCameraEntry.insert(tk.END, "0,0")
                         outCameraEntry.grid(row=1, column=1)
                         #incamera_label.pack()
                         self.subApply = tk.Frame(self.subWin)
@@ -75,7 +83,7 @@ class Application(tk.Frame):
                         applyButton = tk.Button(
                                 self.subApply,
                                 text="Apply",
-                                command = lambda: print("apply")
+                                command = self.get_setting
                         )
                         applyButton.pack(side=LEFT)
                         cancelButton = tk.Button(
@@ -84,17 +92,25 @@ class Application(tk.Frame):
                                 command = self.close_sub
                         )
                         cancelButton.pack(side=LEFT)
-        
+
+        def get_setting(self):
+                self.basehead = self.head.get()
+                self.baseoutcamera = self.outCamera.get()
+                try:
+                        self.xParam = list(map(int, self.basehead.split(",")))
+                        self.yParam = list(map(int, self.baseoutcamera.split(",")))
+                        
+                except:
+                        return
+
         def close_sub(self):
                 self.subWin.destroy()
 
-
-
-
-
+        def endApp(self):
+                self.master.destroy()
 
         def play_video(self):
-                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720)
+                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, xParam = self.xParam, yParam = self.yParam)
                 #self.gazetrack.tracking(height= 720, width= 480, dsize= 720)
                 self.image = PIL.Image.fromarray(self.gazetrack.frame)
                 self.photo = PIL.ImageTk.PhotoImage(image = self.image)
