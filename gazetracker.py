@@ -10,8 +10,8 @@ class GazeTrack():
     x: int
     y: int
 
-    def __init__(self):
-        self.cap = cv2.VideoCapture(1)
+    def __init__(self, cameraid: int):
+        self.cap = cv2.VideoCapture(cameraid)
         self.getAngle = GetAngle.OpenFaceAngle()
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -36,9 +36,8 @@ class GazeTrack():
 
         cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
 
-        self.frame = cv2.resize(self.frame, dsize=(dsize, int(600*int(height)/int(width))))
+        self.frame = cv2.resize(self.frame, dsize=(dsize, int(dsize*int(height)/int(width))))
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
-        #cv2.imshow('frame', frame)
 
     def endTracking(self):
         self.cap.release()
