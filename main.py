@@ -3,6 +3,7 @@ from tkinter.constants import LEFT, NUMERIC
 import cv2
 import PIL.Image, PIL.ImageTk
 from PIL import Image, ImageTk, ImageOps
+import datetime
 
 import gazetracker as gt
 
@@ -110,7 +111,7 @@ class Application(tk.Frame):
         def key_event(self, e):
                 key = e.keysym
                 if key == "p":
-                        print("p")
+                        self.takePhoto()
                 if key == "s":
                         self.setup_window()
                 if key == "e":
@@ -119,9 +120,16 @@ class Application(tk.Frame):
         def endApp(self):
                 self.master.destroy()
 
+        def takePhoto(self):
+                print("take")
+                nowtime = datetime.datetime.now()
+                self.outputimage.save("Photo/" + str(nowtime) + ".jpg")
+                
+
         def play_video(self):
                 self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, xParam = self.xParam, yParam = self.yParam)
                 #self.gazetrack.tracking(height= 720, width= 480, dsize= 720)
+                self.outputimage = PIL.Image.fromarray(self.gazetrack.outputframe)
                 self.image = PIL.Image.fromarray(self.gazetrack.frame)
                 self.photo = PIL.ImageTk.PhotoImage(image = self.image)
                 self.canvas.create_image(0, 30, image= self.photo, anchor = tk.NW)
