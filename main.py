@@ -35,7 +35,7 @@ class Application(tk.Frame):
                 #フレームの作成frame1 = 背景 frame2 = ラベル
                 self.frame1 = tk.Frame(self.master, width=720, height=505, bg="#C4C4C4")
                 self.frame1.place(x=0, y=0)
-                self.frame2 = tk.Frame(self.master, width=720, height=25, bg="#3F3F3F")
+                self.frame2 = tk.Frame(self.master, width=720, height=40, bg="#3F3F3F")
                 self.frame2.place(x=0, y=0)
                 self.canvas = tk.Canvas(self.frame1, width=720, height=480)
                 self.canvas.pack()
@@ -48,6 +48,7 @@ class Application(tk.Frame):
                 e_camera.grid(row=0, column=1, padx=2, pady=2, sticky=tk.E)
 
         def setup_window(self):
+                #self.gazetrack.takePhoto()
                 if self.subWin == None or not self.subWin.winfo_exists():
                         self.subWin = tk.Toplevel()
                         self.subWin.resizable(width=False, height=False)
@@ -106,6 +107,15 @@ class Application(tk.Frame):
         def close_sub(self):
                 self.subWin.destroy()
 
+        def key_event(self, e):
+                key = e.keysym
+                if key == "p":
+                        print("p")
+                if key == "s":
+                        self.setup_window()
+                if key == "e":
+                        self.endApp()
+                
         def endApp(self):
                 self.master.destroy()
 
@@ -122,6 +132,7 @@ def main():
         root = tk.Tk()
         app = Application(master=root)
         app.subWin = None
+        root.bind("<KeyPress>", app.key_event)
         app.mainloop()
 
 if __name__ == "__main__":
