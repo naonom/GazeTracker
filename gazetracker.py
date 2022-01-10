@@ -38,16 +38,10 @@ class GazeTrack():
         self.current_frame = self.cap.get(cv2.CAP_PROP_POS_FRAMES)
         cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
 
+        self.outputframe = self.frame
+
         self.frame = cv2.resize(self.frame, dsize=(dsize, int(dsize*int(height)/int(width))))
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
-
-
-    #def takePhoto(self):
-        #if not os.path.exists("Photo"):
-            #os.mkdir("Photo")
-
-        #cv2.imwrite(os.path.join("Photo", "frame_.jpg"), self.frame)
-        
 
 
     def endTracking(self):
