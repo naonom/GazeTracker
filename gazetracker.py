@@ -1,6 +1,8 @@
 import cv2
 import GetAngle
 import math
+import os
+import time
 
 class GazeTrack():
     cap: cv2
@@ -21,6 +23,7 @@ class GazeTrack():
 
         self.w = self.width//4
         self.h = self.height//4
+        #self.takePhoto()
 
     def tracking(self, height: int, width: int, dsize: int, xParam: list, yParam: list):
         ret, self.frame = self.cap.read()
@@ -37,6 +40,15 @@ class GazeTrack():
 
         self.frame = cv2.resize(self.frame, dsize=(dsize, int(dsize*int(height)/int(width))))
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
+
+
+    #def takePhoto(self):
+        #if not os.path.exists("Photo"):
+            #os.mkdir("Photo")
+
+        #cv2.imwrite(os.path.join("Photo", "frame_.jpg"), self.frame)
+        
+
 
     def endTracking(self):
         self.cap.release()
