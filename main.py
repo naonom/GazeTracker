@@ -4,7 +4,7 @@ import cv2
 import PIL.Image, PIL.ImageTk
 from PIL import Image, ImageTk, ImageOps
 import datetime
-
+import os
 import gazetracker as gt
 
 class Application(tk.Frame):
@@ -122,7 +122,11 @@ class Application(tk.Frame):
 
         def takePhoto(self):
                 print("take")
+                if not os.path.exists("Photo"):
+                        os.mkdir("Photo")
+                
                 nowtime = datetime.datetime.now()
+
                 self.outputimage.save("Photo/" + str(nowtime) + ".jpg")
                 
 
