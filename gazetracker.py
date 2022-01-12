@@ -18,11 +18,11 @@ class GazeTrack():
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-        self.x = self.width//2 - self.width//8
-        self.y = self.height//2 - self.height//8
+        self.x = 0
+        self.y = 0
 
-        self.w = self.width//4
-        self.h = self.height//4
+        self.w = self.width//5
+        self.h = self.height//5
         #self.takePhoto()
 
     def tracking(self, height: int, width: int, dsize: int, xParam: list, yParam: list):
@@ -39,6 +39,7 @@ class GazeTrack():
         cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
 
         self.outputframe = self.frame
+        self.outputframe = cv2.cvtColor(self.outputframe, cv2.COLOR_BGR2RGB)
 
         self.frame = cv2.resize(self.frame, dsize=(dsize, int(dsize*int(height)/int(width))))
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)

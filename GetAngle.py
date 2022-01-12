@@ -6,7 +6,6 @@ class OpenFaceAngle():
     gazeVectorData:list = []
     gazeAngleData:list = []
     pointData:list = []
-    beforeshowPointData: list = [0.0, 0.0]
     movePointData:  list = [0.0, 0.0]
 
     def __init__(self):
@@ -76,20 +75,13 @@ class OpenFaceAngle():
         try: 
             #showPoint_x = (self.pointData[0]) * -40 + 1000
             #showPoint_y = (self.pointData[1]) * 47 + 500
-            showPoint_x = self.pointData[0] * -1 * xParam[0] + xParam[1]
-            showPoint_y = self.pointData[1] * yParam[0] + yParam[1]
+            self.showPoint_x = self.pointData[0] * -1 * xParam[0] + xParam[1]
+            self.showPoint_y = self.pointData[1] * yParam[0] + yParam[1]
             #print(showPoint_x)
 
             self.movePointData.clear()
-            #self.movePointData.append(showPoint_x - self.beforeshowPointData[0])
-            #self.movePointData.append(showPoint_y - self.beforeshowPointData[1])
-            self.movePointData.append(showPoint_x)
-            self.movePointData.append(showPoint_y)
-
-            
-            self.beforeshowPointData.clear()
-            self.beforeshowPointData.append(showPoint_x)
-            self.beforeshowPointData.append(showPoint_y)
+            self.movePointData.append(self.showPoint_x)
+            self.movePointData.append(self.showPoint_y)
             
         except:
             print('setup point error')

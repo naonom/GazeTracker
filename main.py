@@ -6,8 +6,10 @@ from PIL import Image, ImageTk, ImageOps
 import datetime
 import os
 import gazetracker as gt
+import makedata
 
 class Application(tk.Frame):
+        pointing: bool = False
         def __init__(self, master=None):
                 super().__init__(master)
                 self.master.geometry("720x450")
@@ -15,14 +17,17 @@ class Application(tk.Frame):
                 self.master.resizable(width=False, height=False)
                 self.gazetrack = gt.GazeTrack(2)
 
+                basetime = datetime.datetime.now()
+                self.makedata = makedata.MakeData(str(basetime.strftime("%Y,%m,%d,%H,%M")))
+                #self.makedata.makefile()
+                self.makedata.makeFile()
+                self.makedata.openFile()
+                self.makedata.makeHeader()
                 self.subWin = None
 
                 #プロパティ
                 self.width = self.gazetrack.cap.get( cv2.CAP_PROP_FRAME_WIDTH)
                 self.height = self.gazetrack.cap.get( cv2.CAP_PROP_FRAME_HEIGHT)
-                self.fps = self.gazetrack.cap.get(cv2.CAP_PROP_FPS)
-                self.frame_num = self.gazetrack.cap.get(cv2.CAP_PROP_FRAME_COUNT)
-                self.time = self.frame_num / self.fps
 
                 self.xParam: list = [0, 0, 0]
                 self.yParam: list = [0, 0, 0]
@@ -112,16 +117,28 @@ class Application(tk.Frame):
                 key = e.keysym
                 if key == "p":
                         self.takePhoto()
+                        self.makedata.addData(
+                                gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
+                                gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
+                                basepoint_x=self.gazetrack.getAngle.pointData[0],
+                                basepoint_y=self.gazetrack.getAngle.pointData[1],
+                                showpoint_x=self.gazetrack.getAngle.showPoint_x,
+                                showpoint_y=self.gazetrack.getAngle.showPoint_y,
+                                pointing=self.pointing
+                        )
+                        self.pointing = False
                 if key == "s":
                         self.setup_window()
                 if key == "e":
                         self.endApp()
+                        self.makedata.closeFile()
                 
         def endApp(self):
                 self.master.destroy()
 
         def takePhoto(self):
                 print("take")
+                self.pointing = True
                 if not os.path.exists("Photo"):
                         os.mkdir("Photo")
                 
@@ -137,6 +154,19 @@ class Application(tk.Frame):
                 self.image = PIL.Image.fromarray(self.gazetrack.frame)
                 self.photo = PIL.ImageTk.PhotoImage(image = self.image)
                 self.canvas.create_image(0, 30, image= self.photo, anchor = tk.NW)
+
+                #csv
+                
+                self.makedata.addData(
+                        gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
+                        gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
+                        basepoint_x=self.gazetrack.getAngle.pointData[0],
+                        basepoint_y=self.gazetrack.getAngle.pointData[1],
+                        showpoint_x=self.gazetrack.getAngle.showPoint_x,
+                        showpoint_y=self.gazetrack.getAngle.showPoint_y,
+                        pointing=self.pointing
+                )
+                
                 #10ms
                 self.master.after(self.delay, self.play_video)
 
