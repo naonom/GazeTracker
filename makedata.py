@@ -6,7 +6,12 @@ import datetime
 #setting data for txt
 #pointing data for csv
 class MakeData():
-    header: list = ["time", "gaze_x", "gaze_y", "basepoint_x", "basepoint_y",  "showpoint_x", "showpoint_y", "pointing"]
+    header: list = ["time", "gaze_x","gaze_y", 
+                    "basepoint_x", "basepoint_y",  
+                    "showpoint_x", "showpoint_y",
+                    "scale_x","scale_y",
+                    "zeropoint_x", "zeropoint_x",
+                    "pointing"]
 
     def __init__(self, filename: str):
         self.filename = filename
@@ -23,7 +28,20 @@ class MakeData():
     def makeHeader(self):
         self.writer.writerow(self.header)
 
-    def addData(self, gaze_x:float, gaze_y:float, basepoint_x:float, basepoint_y:float, showpoint_x:float, showpoint_y:float, pointing:bool):
+    def addData(
+        self, 
+        gaze_x:float, 
+        gaze_y:float, 
+        basepoint_x:float, 
+        basepoint_y:float, 
+        showpoint_x:float, 
+        showpoint_y:float, 
+        scale_x:int, 
+        scale_y:int,
+        zeropoint_x:int, 
+        zeropoint_y: int, 
+        pointing:bool
+        ):
         basetime = datetime.datetime.now()
         #basetext = str(basetime.strftime("%Y,%m,%d,%H,%M,%S") + (",") + str(basetime.microsecond) + (",") + str(gaze_x) + (",") + str(gaze_y) + (",") + str(basepoint_x) + (",") + str(basepoint_y) + (",") + str(showpoint_x) + (",") + str(showpoint_y) + (",") + str(int(pointing)) + "\n")
 
@@ -35,6 +53,10 @@ class MakeData():
         baselist.append(str(basepoint_y))
         baselist.append(str(showpoint_x))
         baselist.append(str(showpoint_y))
+        baselist.append(str(scale_x))
+        baselist.append(str(scale_y))
+        baselist.append(str(zeropoint_x))
+        baselist.append(str(zeropoint_y))
         baselist.append(str(int(pointing)))
         
         self.writer.writerow(baselist)

@@ -36,8 +36,11 @@ class GazeTrack():
         self.y = math.floor(self.getAngle.movePointData[1])
 
         self.current_frame = self.cap.get(cv2.CAP_PROP_POS_FRAMES)
-        cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
 
+        self.norectframe = self.frame
+        self.norectframe = cv2.cvtColor(self.norectframe, cv2.COLOR_BGR2RGB)
+
+        cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
         self.outputframe = self.frame
         self.outputframe = cv2.cvtColor(self.outputframe, cv2.COLOR_BGR2RGB)
 

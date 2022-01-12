@@ -15,7 +15,7 @@ class Application(tk.Frame):
                 self.master.geometry("720x450")
                 self.master.title("GazeTracker")
                 self.master.resizable(width=False, height=False)
-                self.gazetrack = gt.GazeTrack(2)
+                self.gazetrack = gt.GazeTrack(1)
 
                 basetime = datetime.datetime.now()
                 self.makedata = makedata.MakeData(str(basetime.strftime("%Y,%m,%d,%H,%M")))
@@ -124,6 +124,10 @@ class Application(tk.Frame):
                                 basepoint_y=self.gazetrack.getAngle.pointData[1],
                                 showpoint_x=self.gazetrack.getAngle.showPoint_x,
                                 showpoint_y=self.gazetrack.getAngle.showPoint_y,
+                                scale_x=self.xParam[0],
+                                scale_y=self.yParam[0],
+                                zeropoint_x=self.xParam[1],
+                                zeropoint_y=self.yParam[1],
                                 pointing=self.pointing
                         )
                         self.pointing = False
@@ -145,12 +149,13 @@ class Application(tk.Frame):
                 nowtime = datetime.datetime.now()
 
                 self.outputimage.save("Photo/" + str(nowtime) + ".jpg")
-                
+                self.norectimage.save("Photo/" + str(nowtime) + "noRect.jpg")
 
         def play_video(self):
                 self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, xParam = self.xParam, yParam = self.yParam)
                 #self.gazetrack.tracking(height= 720, width= 480, dsize= 720)
                 self.outputimage = PIL.Image.fromarray(self.gazetrack.outputframe)
+                self.norectimage = PIL.Image.fromarray(self.gazetrack.norectframe)
                 self.image = PIL.Image.fromarray(self.gazetrack.frame)
                 self.photo = PIL.ImageTk.PhotoImage(image = self.image)
                 self.canvas.create_image(0, 30, image= self.photo, anchor = tk.NW)
@@ -164,9 +169,12 @@ class Application(tk.Frame):
                         basepoint_y=self.gazetrack.getAngle.pointData[1],
                         showpoint_x=self.gazetrack.getAngle.showPoint_x,
                         showpoint_y=self.gazetrack.getAngle.showPoint_y,
+                        scale_x=self.xParam[0],
+                        scale_y=self.yParam[0],
+                        zeropoint_x=self.xParam[1],
+                        zeropoint_y=self.yParam[1],
                         pointing=self.pointing
                 )
-                
                 #10ms
                 self.master.after(self.delay, self.play_video)
 
