@@ -15,7 +15,7 @@ class Application(tk.Frame):
                 self.master.geometry("720x450")
                 self.master.title("GazeTracker")
                 self.master.resizable(width=False, height=False)
-                self.gazetrack = gt.GazeTrack(1)
+                self.gazetrack = gt.GazeTrack(0)
 
                 basetime = datetime.datetime.now()
                 self.makedata = makedata.MakeData(str(basetime.strftime("%Y,%m,%d,%H,%M")))
@@ -60,11 +60,22 @@ class Application(tk.Frame):
                         self.subWin.resizable(width=False, height=False)
                         self.subWin.geometry("300x100")
                         self.subWin.title("camera")
+                        distance = tk.Label(self.subWin, text="distance")
+                        distance.grid(row=0, column=0, padx=5, pady=2, sticky=tk.E)
                         headLabel = tk.Label(self.subWin, text="x")
-                        headLabel.grid(row=0, column=0, padx=5, pady=2, sticky=tk.E)
+                        headLabel.grid(row=1, column=0, padx=5, pady=2, sticky=tk.E)
                         outcameraLabel = tk.Label(self.subWin, text="y")
-                        outcameraLabel.grid(row=1, column=0, padx=5, pady=2, sticky=tk.E)
+                        outcameraLabel.grid(row=2, column=0, padx=5, pady=2, sticky=tk.E)
                         
+                        self.distance = tk.StringVar()
+                        distanceEntry = tk.Entry(
+                                self.subWin,
+                                textvariable=self.head,
+                                width=20
+                        )
+                        distanceEntry.insert(tk.END, "0.0")
+                        distanceEntry.grid(row=0, column=1)
+
                         self.head = tk.StringVar()
                         headEntry = tk.Entry(
                                 self.subWin,
@@ -72,7 +83,7 @@ class Application(tk.Frame):
                                 width=20
                         )
                         headEntry.insert(tk.END, "0,0")
-                        headEntry.grid(row=0, column=1)
+                        headEntry.grid(row=1, column=1)
 
 
                         self.outCamera = tk.StringVar()
@@ -82,7 +93,7 @@ class Application(tk.Frame):
                                 width=20
                         )
                         outCameraEntry.insert(tk.END, "0,0")
-                        outCameraEntry.grid(row=1, column=1)
+                        outCameraEntry.grid(row=2, column=1)
                         #incamera_label.pack()
                         self.subApply = tk.Frame(self.subWin)
                         self.subApply.grid(row=2, column=1, padx=0, pady=5, sticky=tk.W)
@@ -152,7 +163,7 @@ class Application(tk.Frame):
                 self.norectimage.save("Photo/" + str(nowtime) + "noRect.jpg")
 
         def play_video(self):
-                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, xParam = self.xParam, yParam = self.yParam)
+                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, distance = 50, xParam = self.xParam, yParam = self.yParam)
                 #self.gazetrack.tracking(height= 720, width= 480, dsize= 720)
                 self.outputimage = PIL.Image.fromarray(self.gazetrack.outputframe)
                 self.norectimage = PIL.Image.fromarray(self.gazetrack.norectframe)

@@ -25,11 +25,11 @@ class GazeTrack():
         self.h = self.height//5
         #self.takePhoto()
 
-    def tracking(self, height: int, width: int, dsize: int, xParam: list, yParam: list):
+    def tracking(self, height: int, width: int, dsize: int, distance: int ,xParam: list, yParam: list):
         ret, self.frame = self.cap.read()
         self.getAngle.getDataModel()
         self.getAngle.pickGazeAngleData()
-        self.getAngle.AngleToPoint(50)
+        self.getAngle.AngleToPoint(distance)
         self.getAngle.setupPoint(xParam=xParam, yParam=yParam)
 
         self.x = math.floor(self.getAngle.movePointData[0])
