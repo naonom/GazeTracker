@@ -10,6 +10,9 @@ import makedata
 
 class Application(tk.Frame):
         pointing: bool = False
+        xCenter: float = 0.0
+        yCenter: float = 0.0
+
         def __init__(self, master=None):
                 super().__init__(master)
                 self.master.geometry("720x450")
@@ -31,6 +34,11 @@ class Application(tk.Frame):
 
                 self.xParam: list = [0, 0, 0]
                 self.yParam: list = [0, 0, 0]
+
+                self.xdis: float = 0.0
+                self.ydis: float = 0.0
+                self.dis: int = 50
+
 
                 self.create_frame()
                 self.create_widget()
@@ -58,21 +66,32 @@ class Application(tk.Frame):
                 if self.subWin == None or not self.subWin.winfo_exists():
                         self.subWin = tk.Toplevel()
                         self.subWin.resizable(width=False, height=False)
-                        self.subWin.geometry("300x100")
+                        self.subWin.geometry("350x150")
                         self.subWin.title("camera")
-                        headLabel = tk.Label(self.subWin, text="x")
-                        headLabel.grid(row=0, column=0, padx=5, pady=2, sticky=tk.E)
-                        outcameraLabel = tk.Label(self.subWin, text="y")
-                        outcameraLabel.grid(row=1, column=0, padx=5, pady=2, sticky=tk.E)
+                        distance = tk.Label(self.subWin, text="distance")
+                        distance.grid(row=0, column=0, padx=5, pady=2, sticky=tk.E)
+                        headLabel = tk.Label(self.subWin, text="xParam")
+                        headLabel.grid(row=1, column=0, padx=5, pady=2, sticky=tk.E)
+                        outcameraLabel = tk.Label(self.subWin, text="yParam")
+                        outcameraLabel.grid(row=2, column=0, padx=5, pady=2, sticky=tk.E)
                         
+                        self.distance = tk.StringVar()
+                        distanceEntry = tk.Entry(
+                                self.subWin,
+                                textvariable=self.distance,
+                                width=20
+                        )
+                        distanceEntry.insert(tk.END, "0")
+                        distanceEntry.grid(row=0, column=1)
+
                         self.head = tk.StringVar()
                         headEntry = tk.Entry(
                                 self.subWin,
                                 textvariable=self.head,
                                 width=20
                         )
-                        headEntry.insert(tk.END, "0,0")
-                        headEntry.grid(row=0, column=1)
+                        headEntry.insert(tk.END, "0.0")
+                        headEntry.grid(row=1, column=1)
 
 
                         self.outCamera = tk.StringVar()
@@ -81,12 +100,18 @@ class Application(tk.Frame):
                                 textvariable=self.outCamera,
                                 width=20
                         )
-                        outCameraEntry.insert(tk.END, "0,0")
-                        outCameraEntry.grid(row=1, column=1)
+                        outCameraEntry.insert(tk.END, "0.0")
+                        outCameraEntry.grid(row=2, column=1)
                         #incamera_label.pack()
                         self.subApply = tk.Frame(self.subWin)
-                        self.subApply.grid(row=2, column=1, padx=0, pady=5, sticky=tk.W)
+                        self.subApply.grid(row=3, column=1, padx=0, pady=5, sticky=tk.W)
 
+                        toCenterButton = tk.Button(
+                                self.subApply,
+                                text="toCenter",
+                                command = self.toCenter
+                        )
+                        toCenterButton.pack(side=LEFT)
                         applyButton = tk.Button(
                                 self.subApply,
                                 text="Apply",
@@ -99,13 +124,18 @@ class Application(tk.Frame):
                                 command = self.close_sub
                         )
                         cancelButton.pack(side=LEFT)
+        def toCenter(self):
+                self.gazetrack.toCenter()
 
         def get_setting(self):
-                self.basehead = self.head.get()
-                self.baseoutcamera = self.outCamera.get()
+                #self.basehead = self.head.get()
+                #self.baseoutcamera = self.outCamera.get()
                 try:
-                        self.xParam = list(map(int, self.basehead.split(",")))
-                        self.yParam = list(map(int, self.baseoutcamera.split(",")))
+                        #self.xParam = list(map(int, self.basehead.split(",")))
+                        #self.yParam = list(map(int, self.baseoutcamera.split(",")))
+                        self.dis = int(self.distance.get())
+                        self.xdis = float(self.head.get())
+                        self.ydis = float(self.outCamera.get())
                         
                 except:
                         return
@@ -117,6 +147,7 @@ class Application(tk.Frame):
                 key = e.keysym
                 if key == "p":
                         self.takePhoto()
+                        
                         self.makedata.addData(
                                 gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
                                 gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
@@ -130,6 +161,7 @@ class Application(tk.Frame):
                                 zeropoint_y=self.yParam[1],
                                 pointing=self.pointing
                         )
+                        
                         self.pointing = False
                 if key == "s":
                         self.setup_window()
@@ -152,7 +184,7 @@ class Application(tk.Frame):
                 self.norectimage.save("Photo/" + str(nowtime) + "noRect.jpg")
 
         def play_video(self):
-                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, xParam = self.xParam, yParam = self.yParam)
+                self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, distance = self.dis, xdis = self.xdis, ydis = self.ydis)
                 #self.gazetrack.tracking(height= 720, width= 480, dsize= 720)
                 self.outputimage = PIL.Image.fromarray(self.gazetrack.outputframe)
                 self.norectimage = PIL.Image.fromarray(self.gazetrack.norectframe)
@@ -175,6 +207,7 @@ class Application(tk.Frame):
                         zeropoint_y=self.yParam[1],
                         pointing=self.pointing
                 )
+                
                 #10ms
                 self.master.after(self.delay, self.play_video)
 

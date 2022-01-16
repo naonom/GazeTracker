@@ -11,6 +11,8 @@ class GazeTrack():
     height: int
     x: int
     y: int
+    xCenter: int
+    yCenter: int
 
     def __init__(self, cameraid: int):
         self.cap = cv2.VideoCapture(cameraid)
@@ -25,12 +27,19 @@ class GazeTrack():
         self.h = self.height//5
         #self.takePhoto()
 
-    def tracking(self, height: int, width: int, dsize: int, xParam: list, yParam: list):
+        self.xCenter = 0
+        self.yCenter = 0
+
+    def toCenter(self):
+        self.xCenter = math.floor(self.getAngle.movePointData[0] + self.width//2)
+        self.yCenter = math.floor(self.getAngle.movePointData[1] - self.height//2)
+
+    def tracking(self, height: int, width: int, dsize: int, distance: int ,xdis: float, ydis: float):
         ret, self.frame = self.cap.read()
         self.getAngle.getDataModel()
         self.getAngle.pickGazeAngleData()
-        self.getAngle.AngleToPoint(50)
-        self.getAngle.setupPoint(xParam=xParam, yParam=yParam)
+        self.getAngle.AngleToPoint()
+        self.getAngle.setupPoint(dis=distance, xdis=xdis, ydis=ydis)
 
         self.x = math.floor(self.getAngle.movePointData[0])
         self.y = math.floor(self.getAngle.movePointData[1])
@@ -40,7 +49,12 @@ class GazeTrack():
         self.norectframe = self.frame
         self.norectframe = cv2.cvtColor(self.norectframe, cv2.COLOR_BGR2RGB)
 
-        cv2.rectangle(self.frame, pt1=(self.x, self.y), pt2=(self.x+self.w,self.y+self.h), color=(0,0,255), thickness=4)
+        xTrack: int = self.x + self.xCenter
+        yTrack: int = self.y - self.yCenter
+        xRect: int = xTrack + self.w
+        yRect: int = yTrack + self.h
+        #print(xTrack, yTrack, xRect, yRect)
+        cv2.rectangle(self.frame, pt1=(xTrack, yTrack), pt2=(xRect, yRect), color=(0,0,255), thickness=4)
         self.outputframe = self.frame
         self.outputframe = cv2.cvtColor(self.outputframe, cv2.COLOR_BGR2RGB)
 

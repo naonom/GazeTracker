@@ -23,7 +23,8 @@ class OpenFaceAngle():
             for i in range(497):
                 fake.append('0')
             self.baseData = fake
-        #print(baseData)
+        #print(self.baseData)
+
     def pickGazeVectorData(self):
         try:
             self.gazeVectorData.clear()
@@ -31,13 +32,13 @@ class OpenFaceAngle():
                 for num in range(6):
                     self.gazeVectorData.append(float(self.baseData[num + 5]))
             else:
-                for i in 6:
+                for i in range(6):
                     self.gazeVectorData.append(0.0)
                 print('tracking fail')
         except:
                 for i in range(6):
                     self.gazeVectorData.append(0.0)
-                    print('get data fail')
+                print('get data fail')
         #print(self.gazeVectorData)
 
     def pickGazeAngleData(self):
@@ -54,54 +55,34 @@ class OpenFaceAngle():
                 print('tracking fail')
         except:
             self.gazeAngleData.clear()
-            for i in range(2):
-                self.gazeAngleData.append(0.0)
+            for i in range(6):                  
+                    self.gazeAngleData.append(0.0)
             print('check data fail')
+            return
         #print(self.gazeAngleData)
 
-    def AngleToPoint(self, distance):
+    def AngleToPoint(self):
         self.pointData.clear()
         try:
-            if distance is not None:
-                for num in range(len(self.gazeAngleData)):
-                    point = distance * math.tan(self.gazeAngleData[num])
-                    self.pointData.append(point)
+            for num in range(len(self.gazeAngleData)):
+                point = math.tan(self.gazeAngleData[num])
+                self.pointData.append(point)
         except:
             print('to point error')
+            return
         
         #print(self.pointData)
 
-    def setupPoint(self, xParam: list, yParam: list):
+    def setupPoint(self, dis: int, xdis: float, ydis: float):
         try: 
-            #showPoint_x = (self.pointData[0]) * -40 + 1000
-            #showPoint_y = (self.pointData[1]) * 47 + 500
-            self.showPoint_x = self.pointData[0] * -1 * xParam[0] + xParam[1]
-            self.showPoint_y = self.pointData[1] * yParam[0] + yParam[1]
-            #print(showPoint_x)
-
+            self.showPoint_x = self.pointData[0] * -1 * dis + xdis
+            self.showPoint_y = self.pointData[1] * dis + ydis
             self.movePointData.clear()
             self.movePointData.append(self.showPoint_x)
             self.movePointData.append(self.showPoint_y)
             
         except:
             print('setup point error')
-
-    def movePointLimit(self):
-        #print('movepoint here?')
-        #0より小さい1280より大きい場合動かさない
-        output_x: float = 0.0
-        output_y: float = 0.0
-        try:
-            #self.point_x += self.showPointData[0]
-            #self.point_y += self.showPointData[1]
-            #print(self.limitArea[0] + self.movePointData[0])
-
-            if self.limitArea[0] + self.movePointData[0] > 0 and self.limitArea[0] + self.movePointData[0] < self.model.width: 
-                output_x = self.movePointData[0]
-            if self.limitArea[1] + self.movePointData[1] > 0 and self.limitArea[1] + self.movePointData[1] < self.model.height:
-                output_y = self.movePointData[1]
-            #self.model.movePoint(self.view.canvas,"viewpoint", output_x, output_y)
-
-        except:
-            self.output_x = 0.0
-            self.output_y = 0.0
+            return
+        
+        #print(self.movePointData)
