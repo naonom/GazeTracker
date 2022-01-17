@@ -12,6 +12,12 @@ class MakeData():
                     "scale_x","scale_y",
                     "zeropoint_x", "zeropoint_x",
                     "pointing"]
+    newHeader: list = ["time", "gaze_x","gaze_y", 
+                    "basepoint_x", "basepoint_y",  
+                    "showpoint_x", "showpoint_y",
+                    "distance",
+                    "xParam", "yParam",
+                    "pointing"]
 
     def __init__(self, filename: str):
         self.filename = filename
@@ -26,7 +32,8 @@ class MakeData():
         self.writer = csv.writer(self.f, lineterminator='\n')
     
     def makeHeader(self):
-        self.writer.writerow(self.header)
+        #self.writer.writerow(self.header)
+        self.writer.writerow(self.newHeader)
 
     def addData(
         self, 
@@ -61,6 +68,28 @@ class MakeData():
         
         self.writer.writerow(baselist)
 
+    def addNewData(self,
+        gaze_x, gaze_y,
+        basepoint_x, basepoint_y,
+        showpoint_x, showpoint_y,
+        distance,
+        xParam, yParam,
+        pointing):
+        basetime = datetime.datetime.now()
+        baselist: list = []
+        baselist.append(str(basetime.strftime("%m:%d:%H:%M:%S")) + ":" + str(basetime.microsecond))
+        baselist.append(str(gaze_x))
+        baselist.append(str(gaze_y))
+        baselist.append(str(basepoint_x))
+        baselist.append(str(basepoint_y))
+        baselist.append(str(showpoint_x))
+        baselist.append(str(showpoint_y))
+        baselist.append(str(distance))
+        baselist.append(str(xParam))
+        baselist.append(str(yParam))
+        baselist.append(str(int(pointing)))
+
+        self.writer.writerow(baselist)
 
     def closeFile(self):
         self.f.close()

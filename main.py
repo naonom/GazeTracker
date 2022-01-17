@@ -7,8 +7,12 @@ import datetime
 import os
 import gazetracker as gt
 import makedata
+import serial
+
 
 class Application(tk.Frame):
+        #ls -l /dev/tty.*
+
         pointing: bool = False
         xCenter: float = 0.0
         yCenter: float = 0.0
@@ -44,7 +48,11 @@ class Application(tk.Frame):
                 self.create_widget()
                 self.delay = 10
                 self.play_video()
-        
+
+                self.com = '/dev/tty.usbserial-3552041E93'
+                self.ser = serial.Serial(self.com, 9600, timeout=None)
+                self.serialCheck()
+
         def create_frame(self):
                 #フレームの作成frame1 = 背景 frame2 = ラベル
                 self.frame1 = tk.Frame(self.master, width=720, height=505, bg="#C4C4C4")
@@ -147,7 +155,7 @@ class Application(tk.Frame):
                 key = e.keysym
                 if key == "p":
                         self.takePhoto()
-                        
+                        '''
                         self.makedata.addData(
                                 gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
                                 gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
@@ -160,6 +168,19 @@ class Application(tk.Frame):
                                 zeropoint_x=self.xParam[1],
                                 zeropoint_y=self.yParam[1],
                                 pointing=self.pointing
+                        )
+                        '''
+                        self.makedata.addNewData(
+                                gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
+                                gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
+                                basepoint_x=self.gazetrack.getAngle.pointData[0],
+                                basepoint_y=self.gazetrack.getAngle.pointData[1],
+                                showpoint_x=self.gazetrack.getAngle.showPoint_x,
+                                showpoint_y=self.gazetrack.getAngle.showPoint_y,
+                                distance=self.dis,
+                                xParam=self.xdis,
+                                yParam=self.ydis,
+                                pointing=self.pointing,
                         )
                         
                         self.pointing = False
@@ -182,6 +203,7 @@ class Application(tk.Frame):
 
                 self.outputimage.save("Photo/" + str(nowtime) + ".jpg")
                 self.norectimage.save("Photo/" + str(nowtime) + "noRect.jpg")
+        
 
         def play_video(self):
                 self.gazetrack.tracking(height= self.height, width= self.width, dsize= 720, distance = self.dis, xdis = self.xdis, ydis = self.ydis)
@@ -193,7 +215,7 @@ class Application(tk.Frame):
                 self.canvas.create_image(0, 30, image= self.photo, anchor = tk.NW)
 
                 #csv
-                
+                '''
                 self.makedata.addData(
                         gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
                         gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
@@ -207,9 +229,27 @@ class Application(tk.Frame):
                         zeropoint_y=self.yParam[1],
                         pointing=self.pointing
                 )
-                
+                '''
+                self.makedata.addNewData(
+                                gaze_x=self.gazetrack.getAngle.gazeAngleData[0],
+                                gaze_y=self.gazetrack.getAngle.gazeAngleData[1],
+                                basepoint_x=self.gazetrack.getAngle.pointData[0],
+                                basepoint_y=self.gazetrack.getAngle.pointData[1],
+                                showpoint_x=self.gazetrack.xTrack,
+                                showpoint_y=self.gazetrack.yTrack,
+                                distance=self.dis,
+                                xParam=self.xdis,
+                                yParam=self.ydis,
+                                pointing=self.pointing,
+                        )
                 #10ms
                 self.master.after(self.delay, self.play_video)
+        
+        def serialCheck(self):
+                result = self.ser.read_all()
+                if result == b"P":
+                        self.takePhoto()
+                self.master.after(self.delay, self.serialCheck)
 
 def main():
         root = tk.Tk()
