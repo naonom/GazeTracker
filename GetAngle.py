@@ -1,7 +1,9 @@
 from sys import stdin
 import math
+import GazeFilter
 
 class OpenFaceAngle():
+    gazefilter:GazeFilter.Filter
     baseData:list = []
     gazeVectorData:list = []
     gazeAngleData:list = []
@@ -11,6 +13,7 @@ class OpenFaceAngle():
     def __init__(self):
         self.width = 1280
         self.height = 720
+        self.gazefilter = GazeFilter.Filter()
     
     def getDataModel(self):
         try:
@@ -48,6 +51,15 @@ class OpenFaceAngle():
                         self.gazeAngleData.clear()
                         self.gazeAngleData.append(float(self.baseData[11]))
                         self.gazeAngleData.append(float(self.baseData[12]))
+
+                        #filter
+                        try:
+                            self.gazeAngleData[0] = self.gazefilter.filterX(self.gazeAngleData[0])
+                            self.gazeAngleData[1] = self.gazefilter.filterX(self.gazeAngleData[1])
+                            print("filter")
+                        except:
+                            return
+
             else:
                 self.gazeAngleData.clear()
                 for i in 6:                  

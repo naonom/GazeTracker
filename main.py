@@ -22,7 +22,7 @@ class Application(tk.Frame):
                 self.master.geometry("720x450")
                 self.master.title("GazeTracker")
                 self.master.resizable(width=False, height=False)
-                self.gazetrack = gt.GazeTrack(1)
+                self.gazetrack = gt.GazeTrack(2)
 
                 basetime = datetime.datetime.now()
                 self.makedata = makedata.MakeData(str(basetime.strftime("%Y,%m,%d,%H,%M")))
@@ -49,9 +49,12 @@ class Application(tk.Frame):
                 self.delay = 10
                 self.play_video()
 
-                self.com = '/dev/tty.usbserial-3552041E93'
-                self.ser = serial.Serial(self.com, 9600, timeout=None)
-                self.serialCheck()
+                try:
+                        self.com = '/dev/tty.usbserial-3552041E93'
+                        self.ser = serial.Serial(self.com, 9600, timeout=None)
+                        self.serialCheck()
+                except:
+                        self.com = None
 
         def create_frame(self):
                 #フレームの作成frame1 = 背景 frame2 = ラベル
@@ -246,9 +249,10 @@ class Application(tk.Frame):
                 self.master.after(self.delay, self.play_video)
         
         def serialCheck(self):
-                result = self.ser.read_all()
-                if result == b"P":
-                        self.takePhoto()
+                if self.com is not None:
+                        result = self.ser.read_all()
+                        if result == b"P":
+                                self.takePhoto()
                 self.master.after(self.delay, self.serialCheck)
 
 def main():
